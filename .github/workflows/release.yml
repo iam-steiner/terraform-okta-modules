@@ -9,7 +9,7 @@ on:
 jobs:
   build:
     if: github.event.pull_request.merged == true
-    runs-on: ["infra", "x64", "linux", "self-hosted"]
+    runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
