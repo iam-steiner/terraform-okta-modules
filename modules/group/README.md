@@ -10,7 +10,7 @@ Create a group in Okta with some extended functionality.
   by Okta for application assignments as described [here](https://help.okta.com/oie/en-us/content/topics/users-groups-profiles/app-assignments-group-push.htm)
 - Assign applications to the group
 - Provision and sync the group with Github
-- Provision and sync the group with a Slack handle (depends on the [Slack Handle Sync](https://seedcx.atlassian.net/wiki/spaces/SEC/pages/3783360545/Slack+Handle+Sync) daily job)
+- Provision and sync the group with a Slack handle (depends on the Slack Handle Sync daily job)
 
 ## Requirements
 
