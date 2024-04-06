@@ -1,0 +1,29 @@
+output:
+  file: README.md
+  mode: replace
+  template: |-
+    <!-- BEGIN_TF_DOCS -->
+    {{ .Content }}
+    <!-- END_TF_DOCS -->
+    {{- printf "\n" -}}
+
+content: |-
+  {{ .Header }}
+
+  {{ .Requirements }}
+
+  ## Example 1
+
+  ```hcl
+  {{ include "examples/example1.hcl" }}
+  ```
+
+  ## Example 2
+
+  ```hcl
+  {{ include "examples/example2.hcl" }}
+  ```
+
+  {{ .Inputs }}
+
+  {{ .Outputs }}

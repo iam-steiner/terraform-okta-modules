@@ -1,0 +1,62 @@
+name: "Pre-commit"
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+
+  pre-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_wrapper: false
+          terraform_version: 1.7.4
+
+      - name: Setup TFLint
+        uses: terraform-linters/setup-tflint@v4
+        with:
+          tflint_version: v0.50.3
+
+      - name: Setup terraform-docs
+        run: |
+          curl -Lo ./terraform-docs.tar.gz https://github.com/terraform-docs/terraform-docs/releases/download/v0.17.0/terraform-docs-v0.17.0-$(uname)-amd64.tar.gz
+          tar -xzf terraform-docs.tar.gz
+          chmod +x terraform-docs
+          echo "$(pwd)" >> $GITHUB_PATH
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        id: setup-python
+        with:
+          cache: 'pip' # caching pip dependencies
+          python-version: '3.11'
+
+      - name: Cache pre-commit deps
+        id: cache_pre_commit
+        uses: actions/cache@v4
+        env:
+          cache-name: cache-pre-commit
+        with:
+          path: |
+            .pre_commit_venv
+            ~/.cache/pre-commit # caching pre-commit environments
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('.pre-commit-config.yaml','~/.cache/pre-commit/*') }}
+
+      - name: Install Pre-Commit
+        if: steps.cache_pre_commit.outputs.cache-hit != 'true'
+        run: |
+          python -m venv .pre_commit_venv
+          . .pre_commit_venv/bin/activate
+          pip install --upgrade pip
+          python -m pip install -r requirements.txt
+
+      - name: Run pre-commit
+        run: |
+          . .pre_commit_venv/bin/activate
+          pre-commit run --show-diff-on-failure --color=always --all-files
