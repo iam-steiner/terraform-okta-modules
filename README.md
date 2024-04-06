@@ -7,7 +7,7 @@ Terraform modules to create resources in Okta
 Each folder should contain a Terraform module with its own documentation
 
 ```shell
-└── tf-okta-modules/
+└── modules/
     ├── app_saml/
     │   ├── main.tf
     │   ├── ..
